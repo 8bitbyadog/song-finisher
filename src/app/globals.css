@@ -1,0 +1,403 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 15, 23, 42;
+  --background-end-rgb: 30, 41, 59;
+  --pixel-border: #4a5568;
+  --pixel-shadow: #2d3748;
+  --pixel-highlight: #718096;
+  --box-depth: 40px;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+  font-family: 'Press Start 2P', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  image-rendering: pixelated;
+  perspective: 1000px;
+}
+
+/* Game Board Styling */
+.game-board {
+  background: #1a202c;
+  border: 8px solid var(--pixel-border);
+  box-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  image-rendering: pixelated;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg);
+  margin-top: 0;
+  transition: transform 2s ease-in-out, margin-top 2s ease-in-out;
+}
+
+.game-board::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.1;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+/* Box Walls */
+.game-board::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.4)
+  );
+  transform: translateZ(-1px);
+  pointer-events: none;
+}
+
+/* Box Sides */
+.box-side {
+  position: absolute;
+  background: var(--pixel-border);
+  transform-origin: top;
+  image-rendering: pixelated;
+  transition: transform 2s ease-in-out;
+}
+
+.box-side-left {
+  left: -8px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  transform: rotateY(-90deg) translateX(-8px);
+}
+
+.box-side-right {
+  right: -8px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  transform: rotateY(90deg) translateX(8px);
+}
+
+.box-side-top {
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  transform: rotateX(90deg) translateY(-8px);
+}
+
+.box-side-bottom {
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  transform: rotateX(-90deg) translateY(8px);
+}
+
+/* Game Content Container */
+.game-content {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(1px);
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.game-content.visible {
+  opacity: 1;
+}
+
+/* Pixel Art Styling */
+.pixel-border {
+  border: 4px solid var(--pixel-border);
+  box-shadow: 
+    inset -4px -4px 0px 0px var(--pixel-shadow),
+    inset 4px 4px 0px 0px var(--pixel-highlight);
+  background: rgba(45, 55, 72, 0.9);
+  backdrop-filter: blur(4px);
+  image-rendering: pixelated;
+}
+
+.pixel-button {
+  background: var(--pixel-border);
+  border: 2px solid var(--pixel-shadow);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-family: 'Press Start 2P', system-ui, -apple-system, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+  box-shadow: 
+    inset -2px -2px 0px 0px var(--pixel-shadow),
+    inset 2px 2px 0px 0px var(--pixel-highlight);
+  position: relative;
+  overflow: hidden;
+  image-rendering: pixelated;
+}
+
+.pixel-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+  image-rendering: pixelated;
+}
+
+.pixel-button:hover::before {
+  left: 100%;
+}
+
+.pixel-button:hover {
+  background: var(--pixel-highlight);
+  transform: translate(1px, 1px);
+  box-shadow: 
+    inset -1px -1px 0px 0px var(--pixel-shadow),
+    inset 1px 1px 0px 0px var(--pixel-highlight);
+}
+
+.pixel-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* Elemental Zone Colors with 3D effect */
+.earth-bg {
+  background: linear-gradient(135deg, #4a3728, #2d1810);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.water-bg {
+  background: linear-gradient(135deg, #1e3a8a, #0f1b4a);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.air-bg {
+  background: linear-gradient(135deg, #2d3748, #1a202c);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.fire-bg {
+  background: linear-gradient(135deg, #7f1d1d, #4a0f0f);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Game Piece Styling with 3D effect */
+.game-piece {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+  box-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.5),
+    inset 0 0 10px rgba(255, 255, 255, 0.5);
+  position: relative;
+  transition: all 0.3s ease;
+  image-rendering: pixelated;
+  transform-style: preserve-3d;
+  transform: translateZ(2px);
+}
+
+.game-piece:hover {
+  transform: translateZ(4px) scale(1.1);
+  box-shadow: 
+    0 0 15px rgba(0, 0, 0, 0.7),
+    inset 0 0 15px rgba(255, 255, 255, 0.7);
+}
+
+/* Card Styling with 3D effect */
+.card {
+  background: linear-gradient(135deg, #2d3748, #1a202c);
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  padding: 1rem;
+  position: relative;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  image-rendering: pixelated;
+  transform: translateZ(2px);
+}
+
+.card:hover {
+  transform: translateZ(4px) translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: card-shine 2s infinite;
+  image-rendering: pixelated;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.float-idle {
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes dice-roll {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.dice-roll {
+  animation: dice-roll 0.5s ease-in-out;
+}
+
+@keyframes card-flip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(180deg); }
+}
+
+.card-flip {
+  animation: card-flip 0.5s ease-in-out;
+}
+
+@keyframes card-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Cursor Styles */
+.cursor-normal {
+  cursor: url('/cursor-normal.svg') 0 0, auto;
+}
+
+.cursor-interact {
+  cursor: url('/cursor-interact.svg') 0 0, pointer;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 10;
+  border: 1px solid var(--pixel-border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  image-rendering: pixelated;
+}
+
+/* Zone Transitions */
+.zone-fade {
+  animation: zone-fade 0.5s ease-in-out;
+}
+
+@keyframes zone-fade {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Card Rarities */
+.holographic-shine {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pixel-border {
+    border-width: 2px;
+  }
+  
+  .pixel-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.5rem;
+  }
+}
+
+/* Jumanji Box Styles */
+@keyframes openBox {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(60deg) rotateY(0deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.opening-animation {
+  animation: openBox 2s ease-in-out forwards;
+}
+
+/* Game Board Initial State */
+.game-board.initial-state {
+  transform: rotateX(0deg);
+  margin-top: 0;
+}
+
+.game-board.game-state {
+  transform: rotateX(60deg);
+  margin-top: var(--box-depth);
+}

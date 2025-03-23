@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cursor body -->
+  <rect x="0" y="0" width="2" height="16" fill="white"/>
+  <rect x="2" y="0" width="2" height="14" fill="white"/>
+  <rect x="4" y="0" width="2" height="12" fill="white"/>
+  <rect x="6" y="0" width="2" height="10" fill="white"/>
+  <rect x="8" y="0" width="2" height="8" fill="white"/>
+  <rect x="10" y="0" width="2" height="6" fill="white"/>
+  <rect x="12" y="0" width="2" height="4" fill="white"/>
+  <rect x="14" y="0" width="2" height="2" fill="white"/>
+  
+  <!-- Cursor outline -->
+  <rect x="0" y="0" width="16" height="1" fill="black"/>
+  <rect x="0" y="0" width="1" height="16" fill="black"/>
+  <rect x="15" y="0" width="1" height="16" fill="black"/>
+  <rect x="0" y="15" width="16" height="1" fill="black"/>
+</svg> 

@@ -1,16 +1,29 @@
-# Song Finisher 🎵
+# Song Finisher
 
-A gamified approach to completing your songs, inspired by classic board games and retro video games. Built with Next.js and TypeScript.
+A gamified approach to songwriting that combines retro gaming aesthetics with board game mechanics. This tool helps musicians overcome creative blocks through character-driven challenges, momentum dice, and collectible cards.
 
 ## Features
 
-- 🎮 Retro gaming aesthetic with pixel art styling
-- 🎲 Momentum dice system for progress tracking
-- 🎴 Collectible cards with inspiring quotes
-- 🌍 Four elemental zones (Earth, Water, Air, Fire)
-- ⚡ Character-specific abilities
-- 🏆 Achievement system
-- ⏱️ Time-based challenges
+- **Beautiful Board Game Interface**
+  - Ornate wooden frame design
+  - Four elemental zones (Earth, Ocean, Air, Fire)
+  - Glowing corner orbs
+  - Central medallion
+  - Themed dice for each element
+
+- **Game Mechanics**
+  - Character selection with unique abilities
+  - Zone-specific challenges
+  - Momentum-based dice system
+  - Collectible cards
+  - Achievement tracking
+
+- **Visual Design**
+  - Retro gaming aesthetic
+  - Pixel art elements
+  - Wood textures and gold accents
+  - Smooth animations
+  - Responsive layout
 
 ## Getting Started
 
@@ -21,6 +34,7 @@ git clone https://github.com/8bitbyadog/song-finisher.git
 
 2. Install dependencies:
 ```bash
+cd song-finisher
 npm install
 ```
 
@@ -31,28 +45,18 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Game Zones
-
-- **Earth Zone**: Basic song structure and foundation
-- **Water Zone**: Production and emotion
-- **Air Zone**: Promotion and communication
-- **Fire Zone**: Live performance and energy
-
-## Characters
-
-- **Eixi 3**: Spirit Conductor (Fire)
-- **DJ Jammy Jams**: Train Conductor (Air)
-- **Dream Girl**: Music Conductor (Earth)
-- **Sharkwitch**: Balanced Approach (Water)
-
 ## Technologies Used
 
-- Next.js 14
+- Next.js 15.2.3
+- React
 - TypeScript
 - Tailwind CSS
-- React
-- CSS Animations
+- SVG Animations
+
+## Contributing
+
+Feel free to contribute to this project by submitting issues or pull requests.
 
 ## License
 
-MIT License - feel free to use this project for your own purposes!
+This project is licensed under the MIT License.

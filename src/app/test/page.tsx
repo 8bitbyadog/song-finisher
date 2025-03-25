@@ -345,37 +345,23 @@ export default function TestPage() {
 
   // Timer effect
   useEffect(() => {
-    if (gameState.currentChallenge && !timer.isActive) {
-      const intervalId = setInterval(() => {
-        setTimer((prev: TimerState) => {
-          if (prev.timeRemaining <= 1) {
-            clearInterval(prev.intervalId!);
-            return {
-              isActive: false,
-              timeRemaining: 0,
-              intervalId: null
-            };
-          }
-          return {
+    if (gameState.currentChallenge && timer.isActive) {
+      if (gameState.timeRemaining > 0) {
+        const intervalId = setInterval(() => {
+          setGameState(prev => ({
             ...prev,
             timeRemaining: prev.timeRemaining - 1
-          };
-        });
-      }, 1000);
-
-      setTimer({
-        isActive: true,
-        timeRemaining: gameState.timeRemaining,
-        intervalId
-      });
-    }
-
-    return () => {
-      if (timer.intervalId) {
-        clearInterval(timer.intervalId);
+          }));
+        }, 1000);
+        setTimer(prev => ({ ...prev, intervalId }));
+      } else {
+        if (timer.intervalId) {
+          clearInterval(timer.intervalId);
+        }
+        setTimer(prev => ({ ...prev, isActive: false, intervalId: null }));
       }
-    };
-  }, [gameState.currentChallenge]);
+    }
+  }, [gameState.currentChallenge, gameState.timeRemaining, timer.isActive]);
 
   // Update character ability activation
   const activateCharacterAbility = () => {

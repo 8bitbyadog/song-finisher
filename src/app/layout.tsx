@@ -16,12 +16,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${pressStart2P.variable} font-pixel`}>{children}</body>
+    <html lang="en" className={pressStart2P.variable}>
+      <body className="font-pixel bg-black text-white">
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: '/song-finisher',
+  // Comment out static export settings for development
+  // output: 'export',
+  // basePath: '/song-finisher',
   images: {
     unoptimized: true,
   },

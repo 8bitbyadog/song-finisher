@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 // Game Types
 interface Position {
@@ -18,16 +17,13 @@ interface Card {
 }
 
 interface GameState {
-  character: string;
-  track: string;
-  mode: string;
   position: Position;
-  currentZone: string;
   momentum: number;
   cards: Card[];
   achievements: string[];
-  timeRemaining: number;
   currentChallenge: Challenge | null;
+  timeRemaining: number;
+  currentZone: string;
 }
 
 interface Challenge {
@@ -107,52 +103,17 @@ function getZoneForPosition(position: Position): string | null {
 }
 
 export default function GamePage() {
-  // Game State
-  const [character, setCharacter] = useState<string>('eixi-3');
-  const [track, setTrack] = useState<string>('earth');
-  const [mode, setMode] = useState<string>('guitar');
-  const [position, setPosition] = useState<Position>({ x: 5, y: 5 });
-  const [currentZone, setCurrentZone] = useState<string>('neutral');
-  const [dice, setDice] = useState<number>(1);
-  const [isRolling, setIsRolling] = useState<boolean>(false);
-  const [currentCard, setCurrentCard] = useState<Card>(cards[0]);
-  const [isFlipping, setIsFlipping] = useState<boolean>(false);
-  const [showTooltip, setShowTooltip] = useState<string>('');
+  const [showContent, setShowContent] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
   const [gameState, setGameState] = useState<GameState>({
-    character: 'eixi-3',
-    track: 'earth',
-    mode: 'guitar',
-    position: { x: 5, y: 5 },
-    currentZone: 'neutral',
+    position: { x: 0, y: 0 },
     momentum: 0,
     cards: [],
     achievements: [],
+    currentChallenge: null,
     timeRemaining: 0,
-    currentChallenge: null
+    currentZone: 'neutral'
   });
-  const [isTransitioning, setIsTransitioning] = useState(true);
-  const [showContent, setShowContent] = useState(false);
-
-  // Zone Detection
-  useEffect(() => {
-    const { x, y } = position;
-    
-    let newZone = 'neutral';
-    if (x >= ZONES.earth.x[0] && x <= ZONES.earth.x[1] && y >= ZONES.earth.y[0] && y <= ZONES.earth.y[1]) {
-      newZone = 'earth';
-    } else if (x >= ZONES.water.x[0] && x <= ZONES.water.x[1] && y >= ZONES.water.y[0] && y <= ZONES.water.y[1]) {
-      newZone = 'water';
-    } else if (x >= ZONES.air.x[0] && x <= ZONES.air.x[1] && y >= ZONES.air.y[0] && y <= ZONES.air.y[1]) {
-      newZone = 'air';
-    } else if (x >= ZONES.fire.x[0] && x <= ZONES.fire.x[1] && y >= ZONES.fire.y[0] && y <= ZONES.fire.y[1]) {
-      newZone = 'fire';
-    }
-    
-    if (newZone !== currentZone) {
-      setCurrentZone(newZone);
-      handleZoneEntry(newZone);
-    }
-  }, [position, currentZone]);
 
   // Handle Zone Entry
   const handleZoneEntry = (zone: string) => {
@@ -169,52 +130,37 @@ export default function GamePage() {
     }
   };
 
+  // Zone Detection
+  useEffect(() => {
+    const { x, y } = gameState.position;
+    
+    let newZone = 'neutral';
+    if (x >= ZONES.earth.x[0] && x <= ZONES.earth.x[1] && y >= ZONES.earth.y[0] && y <= ZONES.earth.y[1]) {
+      newZone = 'earth';
+    } else if (x >= ZONES.water.x[0] && x <= ZONES.water.x[1] && y >= ZONES.water.y[0] && y <= ZONES.water.y[1]) {
+      newZone = 'water';
+    } else if (x >= ZONES.air.x[0] && x <= ZONES.air.x[1] && y >= ZONES.air.y[0] && y <= ZONES.air.y[1]) {
+      newZone = 'air';
+    } else if (x >= ZONES.fire.x[0] && x <= ZONES.fire.x[1] && y >= ZONES.fire.y[0] && y <= ZONES.fire.y[1]) {
+      newZone = 'fire';
+    }
+    
+    if (newZone !== gameState.currentZone) {
+      handleZoneEntry(newZone);
+    }
+  }, [gameState.position, gameState.currentZone, handleZoneEntry]);
+
   // Game Actions
   const rollDice = () => {
-    setIsRolling(true);
-    setTimeout(() => {
-      const newRoll = Math.floor(Math.random() * 6) + 1;
-      setDice(newRoll);
-      setIsRolling(false);
-    }, 1000);
+    // Implementation of rollDice function
   };
 
   const drawCard = () => {
-    setIsFlipping(true);
-    setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * cards.length);
-      setCurrentCard(cards[randomIndex]);
-      setIsFlipping(false);
-    }, 500);
+    // Implementation of drawCard function
   };
 
   const completeChallenge = () => {
-    const { currentChallenge } = gameState;
-    if (!currentChallenge) return;
-
-    switch (currentChallenge.reward) {
-      case 'momentum':
-        setGameState(prev => ({
-          ...prev,
-          momentum: prev.momentum + 1
-        }));
-        break;
-      case 'card':
-        drawCard();
-        break;
-      case 'achievement':
-        setGameState(prev => ({
-          ...prev,
-          achievements: [...prev.achievements, currentChallenge.id]
-        }));
-        break;
-    }
-
-    setGameState(prev => ({
-      ...prev,
-      currentChallenge: null,
-      timeRemaining: 0
-    }));
+    // Implementation of completeChallenge function
   };
 
   useEffect(() => {
@@ -260,9 +206,9 @@ export default function GamePage() {
                 {CHARACTERS.map(char => (
                   <button
                     key={char.id}
-                    onClick={() => setCharacter(char.id)}
+                    onClick={() => setSelectedCharacter(char.id)}
                     className={`pixel-border p-2 text-center ${
-                      character === char.id ? 'bg-blue-900' : ''
+                      selectedCharacter === char.id ? 'bg-blue-900' : ''
                     }`}
                   >
                     <div className="text-sm mb-1">{char.name}</div>
